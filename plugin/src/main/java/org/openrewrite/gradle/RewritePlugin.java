@@ -76,9 +76,9 @@ public class RewritePlugin implements Plugin<Project> {
         // the user to set the rewrite version in the extension. `addLater` doesn't work here because
         // it operates on a single dependency at a time.
         rewriteConf.getIncoming().beforeResolve(conf -> {
-            //rewriteConf.getDependencies().addAll(
-            //    knownRewriteDependencies(extension, project.getDependencies())
-            //);
+            rewriteConf.getDependencies().addAll(
+                knownRewriteDependencies(extension, project.getDependencies())
+            );
         });
 
 
@@ -193,15 +193,8 @@ public class RewritePlugin implements Plugin<Project> {
 
     private Set<File> getResolvedDependencies(Project project, RewriteExtension extension, Configuration rewriteConf) {
         if (resolvedDependencies == null) {
-            Dependency[] dependencies = Stream.concat(
-                    knownRewriteDependencies(extension, project.getDependencies()).stream(),
-                    rewriteConf.getDependencies().stream()
-            ).toArray(Dependency[]::new);
-            // By using a detached configuration, we separate this dependency resolution from the rest of the project's
-            // configuration. This also means that Gradle has no criteria with which to select between variants of
-            // dependencies which expose differing capabilities. So those must be manually configured
-            Configuration detachedConf = project.getConfigurations().detachedConfiguration(dependencies);
-            resolvedDependencies = detachedConf.resolve();
+         resolvedDependencies = rewriteConf.resolve();
+
         }
         return resolvedDependencies;
     }

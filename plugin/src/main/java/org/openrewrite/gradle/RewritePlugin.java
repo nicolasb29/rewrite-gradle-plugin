@@ -76,9 +76,9 @@ public class RewritePlugin implements Plugin<Project> {
         // the user to set the rewrite version in the extension. `addLater` doesn't work here because
         // it operates on a single dependency at a time.
         rewriteConf.getIncoming().beforeResolve(conf -> {
-            rewriteConf.getDependencies().addAll(
-                knownRewriteDependencies(extension, project.getDependencies())
-            );
+            //rewriteConf.getDependencies().addAll(
+            //    knownRewriteDependencies(extension, project.getDependencies())
+            //);
         });
 
 
